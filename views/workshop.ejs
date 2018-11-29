@@ -1,0 +1,42 @@
+<html>
+<body>
+	<script>
+		editEvent=(ind=null)=>{
+			event=(ind!=null)?events[ind]:{};
+			$("#_id").val(event._id||'')
+			$("#name").val(event.name||'');
+			$("#description").val(event.description||'');
+			$("#time").val(event.time||'');
+			$("#venue").val(event.venue||'');
+			$('.events-tab').hide();
+			$('.edit-event').fadeIn(1000);
+		}
+		$('form').submit((e)=>{
+			e.preventDefault();
+			data={
+				'_id':$("#_id").val(),
+				'name':$('#name').val(),
+				'description':$('#description').val(),
+				'time':$('#time').val(),
+				'venue':$('#venue').val(),
+			};
+			console.log(data)
+			$.ajax({
+				method:'POST',
+				url:'<%- data.section_code %>/save',
+				data:data,
+			}).done((res)=>{
+				if(res.code==0){
+					location.replace="/admin";
+				}
+				else if(res.code==1){
+					$('.alert .message').html(res.message);
+					$('.alert').addClass('alert-success').show('slow');
+					back();
+					getEvents();
+				}
+			})
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Abacus 2K18</title>
+	<link rel="icon" href="/images/home.jpg">
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<script src="/jquery.js"></script>
+	<script src="/js/bootstrap.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<style type="text/css">
+.col-sm{
+	padding: 10px;
+}
+.main-card{
+	text-align: center;
+	text-decoration: none !important;
+}
+.main-card .card-body{
+	font-size: 50px;
+}
+</style>
+<body ng-app="abacus" ng-controller="abacusCtrl" class="bg-light">
+	<div class="jumbotron jumbotron-fluid bg-dark text-white">
+		<div class="container">
+			<h1 class="display-4">Abacus 2K18</h1>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row text-success" id="sections">
+			<div class="col-sm">
+				<a class="card main-card" href="#" ng-click="show('tech')">
+					<div class="card-body"><div><i class="far fa-grin-alt"></i></div></div>
+					<div class="card-footer">Technical</div>
+				</a>
+			</div>
+			<div class="col-sm">
+				<a class="card main-card" href="#" ng-click="show('non-tech')">
+					<div class="card-body"><div><i class="far fa-grin-stars"></i></div></div>
+					<div class="card-footer">Non Technical</div>
+				</a>
+			</div>
+			<div class="col-sm">
+				<a class="card main-card" href="#" ng-click="show('workshop')">
+					<div class="card-body"><div><i class="far fa-smile-wink"></i></div></div>
+					<div class="card-footer">Workshop</div>
+				</a>
+			</div>
+		</div>
+		<div class="row text-center" id="login-section" style="display:none;">
+			<div class="col-sm d-flex justify-content-left" style="height: 60px;">
+				<button class="btn btn-outline-primary" ng-click=hide()>Back</button>
+			</div>
+			<div class="col-sm">
+				<div class="card border-primary">
+					<div class="card-header border-primary">{{section}} Section</div>
+					<div class="card-body">
+						<form ng-submit="login()">
+							<label for="key">Key</label>
+							<input class="form-control" id="key" placeholder="Eg: abacus_tech_2k18" ng-model="key">
+							<br>
+							<button type="submit" class="btn btn-outline-primary">Go</button>
+						</form>
+					</div>
+					<div class="card-footer error" id="error" style="display: none;">
+						<div class="alert alert-danger">
+							Invalid key
+							<button type="button" class="close" onclick="$('#error').hide('slow')">
+								<span>&times;</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>	
+			<div class="col-sm"></div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+	angular.module('abacus', ['ngSanitize']).controller('abacusCtrl', function($scope) {
+		$scope.section=null;
+		$scope.clicked=null;
+		$scope.show=(clicked)=>{
+			$('#sections').hide();
+			$scope.clicked=clicked;
+			// $scope.key=clicked;
+			if (clicked=='tech') {
+				$scope.section='Techinal';
+			}else if(clicked=='non-tech'){
+				$scope.section='Non Techinal';
+			}else{
+				$scope.section='Workshop';
+			}
+			$('#login-section').show('slow');
+		}
+		$scope.hide=()=>{
+			$('#login-section').hide();
+			$('#sections').show('slow');
+		}
+		$scope.login=()=>{
+			$.ajax({
+				url:'/admin/login',
+				data:{'section':$scope.clicked,'key':$('#key').val()},
+				type:'post'
+			}).done((res)=>{
+				console.log(res)
+				if(res.code==0){
+					location.href=`/admin/${$scope.clicked}`
+				}else{
+					$('#error').show('slow');
+				}
+			})
+		}
+	});
+</script>
+</html>
