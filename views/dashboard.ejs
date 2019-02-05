@@ -125,6 +125,8 @@
 			});
 		}; $scope.getEvents();
 		$scope.submitForm = function () {
+			$('.alert .message').html('Submitting...');
+			$('.alert').addClass('alert-success').show('slow');
 			var image = document.getElementsByName("image")[0].files[0];
 			var fd = new FormData();
 			fd.append('image', image);
@@ -145,6 +147,8 @@
 			})
 		}
 		$scope.remEvent = (_id) => {
+			$('.alert .message').html('Removing...');
+			$('.alert').addClass('alert-success').show('slow');
 			console.log(_id)
 			if (!confirm('Are you sure to Delete?')) {
 				return;
