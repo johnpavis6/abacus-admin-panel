@@ -71,7 +71,6 @@ module.exports.tech_save = (req, res) => {
 	var data = JSON.parse(req.body.data);
 	if (req.file)
 		data['icon'] = req.file.filename;
-	console.log(req.file, data)
 	if (!data._id) {
 		techs.insertOne(data, (err, result) => {
 			res.send({ code: 1, message: 'Created Successfully' });
@@ -87,7 +86,6 @@ module.exports.non_tech_save = (req, res) => {
 	var data = JSON.parse(req.body.data);
 	if (req.file)
 		data['icon'] = req.file.filename;
-	console.log(req.file, data)
 	if (!data._id) {
 		non_techs.insertOne(data, (err, result) => {
 			res.send({ code: 1, message: 'Created Successfully' });
