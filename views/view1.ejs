@@ -1,0 +1,70 @@
+<div class="form-group">
+    <div class="input-group form-group">
+        <div class="input-group-prepend">
+            <label for="rounds" class="input-group-text">Rounds</label>
+        </div>
+        <button class="btn btn-outline-secondary" type="button" ng-click="inc('rounds')">+</button>
+    </div>
+    <ol id="rounds">
+        <li ng-repeat="round in data.rounds track by $index">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <label for="rounds" class="input-group-text">Desc</label>
+                </div>
+                <textarea type="text" class="form-control" name="rounds" ng-model="data.rounds[$index]"></textarea>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" ng-click="del('rounds',$index)">X</button>
+                </div>
+            </div>
+        </li>
+    </ol>
+</div>
+<div class="form-group">
+    <div class="input-group form-group">
+        <div class="input-group-prepend">
+            <label for="rules" class="input-group-text">Rules</label>
+        </div>
+        <button class="btn btn-outline-secondary" type="button" ng-click="inc('rules')">+</button>
+    </div>
+    <ol id="rules">
+        <li ng-repeat="rule in data.rules track by $index">
+            <div class="input-group form-group">
+                <input type="text" class="form-control" name="rules" ng-model="data.rules[$index]">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" ng-click="del('rules',$index)">X</button>
+                </div>
+            </div>
+        </li>
+    </ol>
+</div>
+<div class="form-group">
+    <div class="input-group form-group">
+        <div class="input-group-prepend">
+            <label for="rounds" class="input-group-text">Contacts</label>
+        </div>
+        <button class="btn btn-outline-secondary" type="button" ng-click="inc('contacts')">+</button>
+    </div>
+    <ol id="contacts">
+        <li ng-repeat="contact in data.contacts track by $index">
+            <div class="input-group form-group">
+                <div class="input-group-prepend">
+                    <label for="description" class="input-group-text">Name</label>
+                </div>
+                <input type="text" class="form-control" name="contacts" ng-model="data.contacts[$index].name">
+                <div class="input-group-append">
+                    <label for="description" class="input-group-text">Ph No</label>
+                </div>
+                <input type="number" class="form-control" name="contacts" ng-model="data.contacts[$index].contact_no">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" ng-click="del('contacts',$index)">X</button>
+                </div>
+            </div>
+        </li>
+    </ol>
+</div>
+<div class="input-group form-group">
+    <div class="input-group-prepend">
+        <label for="url" class="input-group-text">Url</label>
+    </div>
+    <input type="text" class="form-control" id="url" ng-model="data.url">
+</div>

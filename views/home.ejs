@@ -102,13 +102,13 @@
 		}
 		$scope.login=()=>{
 			$.ajax({
-				url:'/admin/login',
+				url:'/login',
 				data:{'section':$scope.clicked,'key':$('#key').val()},
 				type:'post'
 			}).done((res)=>{
 				console.log(res)
 				if(res.code==0){
-					location.href=`/admin/${$scope.clicked}`
+					location.href=`/${$scope.clicked}`
 				}else{
 					$('#error').show('slow');
 				}

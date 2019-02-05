@@ -1,4 +1,5 @@
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -6,10 +7,13 @@
 	<link rel="icon" href="/images/home.jpg">
 	<link rel="stylesheet" href="/css/bootstrap.css">
 	<script src="/jquery.js"></script>
+	<script src="/angular.js"></script>
 	<script src="/js/bootstrap.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
 </head>
-<body class="bg-light">
+
+<body class="bg-light" ng-app="abacus-admin-panel" ng-controller="mainCtrl">
 	<div class="loading">
 		<div class="alert alert-primary">Loading...</div>
 	</div>
@@ -17,7 +21,8 @@
 		<div class="jumbotron jumbotron-fluid bg-dark text-white">
 			<div class="container">
 				<h1 class="display-4">Abacus 2K18</h1>
-				<p class="lead"><%- data.section %> Section</p>
+				<p class="lead">
+					<%- data.section %> Section</p>
 			</div>
 		</div>
 		<div class="container-fluid">
@@ -29,44 +34,66 @@
 			</div>
 			<div class="events-tab">
 				<div class="form-group d-flex justify-content-center">
-					<button class="btn btn-outline-primary" onclick="editEvent();">New</button>
+					<button class="btn btn-outline-primary" ng-click="editEvent(-1);">New</button>
 				</div>
-				<div class="list-group" id="events"></div>
+				<div class="list-group" id="events">
+					<div class="list-group-item" ng-repeat="event in events">
+						<a href="#{{event.name}}" ng-click=editEvent($index);>{{event.name}}</a>
+						<button class="close text-danger" style="float:right;" ng-click=remEvent(event._id);>&times;</button>
+					</div>
+				</div>
 				<div align="center"><br><a class="btn btn-outline-primary" href="logout">Logout</a></div>
 			</div>
 			<div class="edit-event" style="display: none;">
 				<div class="container-fluid row form-group">
 					<button class="btn btn-outline-primary" onclick="back();">Back</button>
 				</div>
-				<form id="form" action="<%- data.section_code %>/save" method="POST" enctype="multipart/form-data" autocomplete="off">
-					<input type="hidden" id="_id">
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<label for="name" class="input-group-text">Name</label>
+				<form id="form" autocomplete="off" ng-submit="submitForm()">
+					<input type="hidden" id="_id" ng-model="data._id">
+					<div class="row">
+						<div class="col-sm">
+							<div class="input-group form-group">
+								<div class="input-group-prepend">
+									<label for="name" class="input-group-text">Name</label>
+								</div>
+								<input type="text" class="form-control" id="name" ng-model="data.name" required>
+							</div>
+							<div class="input-group form-group">
+								<div class="input-group-prepend">
+									<label for="description" class="input-group-text">Description</label>
+								</div>
+								<textarea class="form-control" id="description" ng-model="data.description"></textarea>
+							</div>
+							<div class="input-group form-group">
+								<div class="input-group-prepend">
+									<label class="input-group-text" for="date">Date</label>
+								</div>
+								<input type="date" class="form-control" id="date" ng-model="data.date">
+								<div class="input-group-append">
+									<label class="input-group-text" for="time">Time</label>
+								</div>
+								<input type="time" class="form-control" id="time" ng-model="data.time">
+							</div>
+							<div class="input-group form-group">
+								<div class="input-group-prepend">
+									<label class="input-group-text" for="venue">Venue</label>
+								</div>
+								<input type="text" class="form-control" id="venue" ng-model="data.value">
+							</div>
 						</div>
-						<input type="text" class="form-control" id="name">
-					</div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<label for="description" class="input-group-text">Description</label>
+						<div class="col-sm">
+							<%- include(data.include) %>
+							<div class="input-group mb-3 input-group-default">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Attach Image</span>
+								</div>
+								<input type="file" name="image">
+								<img src="/uploads/{{data.icon}}" width="100px" height="100px">
+							</div>
 						</div>
-						<textarea class="form-control" id="description"></textarea>
 					</div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="time">Time</label>
-						</div>
-						<input type="time" class="form-control" id="time">
-					</div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="venue">Venue</label>
-						</div>
-						<input type="text" class="form-control" id="venue">
-					</div>
-					<%- include(data.include) %>
-					<div class="form-group">
-						<input type="submit" value="Save" class="btn btn-outline-primary form-control">
+					<div class="form-group" style="width:100%;display: flex;">
+						<input type="submit" value="Save" class="btn btn-outline-primary" style="margin:auto">
 					</div>
 				</form>
 			</div>
@@ -74,58 +101,101 @@
 	</div>
 </body>
 <script type="text/javascript">
-	$(document).ready(()=>{
+	$(document).ready(() => {
 		$('.loading').hide();
 		$('.body').fadeIn(1000);
 	});
-	back=()=>{
+	back = () => {
 		$('.edit-event').hide();
 		$('.events-tab').fadeIn(1000);
 	}
-	events=[];
-	addEvents=()=>{
-		console.log(events);
-		$("#events").html("");
-		events.forEach((event,ind)=>{
-			$("#events").append(`
-				<div class="list-group-item">
-				<a href="#${event.name}" onclick=editEvent(${ind});>${event.name}</a>
-				<button class="close text-danger" style="float:right;" onclick=remEvent('${event._id}');>&times;</button>
-				</div>
-				`);
-		});
-	}
-	(getEvents=()=>{
-		$.ajax({
-			method:'POST',
-			url:'<%- data.section_code %>/events',
-		}).done((res)=>{
-			events=res.events;
-			addEvents();
-		});
-	})();
-	remEvent=(_id)=>{
-		if(!confirm('Are you sure to Delete?')){
-			return;
-		}
-		$.ajax({
-			url:'<%- data.section_code %>/remove',
-			type:'POST',
-			data:{_id:_id},
-		}).done((res)=>{
-			if(res.code==0){
-				location.replace="/admin";
-			}
-			else if(res.code==1){
-				getEvents();
-				$('.alert .message').html(res.message);
-				$('.alert').addClass('alert-success').show('slow');
-			}
-		})
-	}
-	close=()=>{
+	close = () => {
 		console.log('ehre')
 		$('#alert').hide('slow');
 	}
+	var app = angular.module("abacus-admin-panel", []);
+	app.controller('mainCtrl', function ($scope, $http) {
+		$scope.events = [];
+		$scope.getEvents = () => {
+			$http({
+				method: 'POST',
+				url: '/<%- data.section_code %>/events',
+			}).then((res) => {
+				$scope.events = res.data.events;
+			});
+		}; $scope.getEvents();
+		$scope.submitForm = function () {
+			var image = document.getElementsByName("image")[0].files[0];
+			var fd = new FormData();
+			fd.append('image', image);
+			fd.append('data', JSON.stringify(getExceptID($scope.data)));
+			console.log(fd);
+			$http({
+				data: fd,
+				url: '/<%- data.section_code %>/save',
+				method: 'post',
+				headers: { 'Content-Type': undefined }
+			}).then(function (res) {
+				back();
+				$scope.getEvents();
+				$('.alert .message').html(res.data.message);
+				$('.alert').addClass('alert-success').show('slow');
+			}, function (res) {
+				$('#error').fadeIn();
+			})
+		}
+		$scope.remEvent = (_id) => {
+			console.log(_id)
+			if (!confirm('Are you sure to Delete?')) {
+				return;
+			}
+			$http({
+				url: '/<%- data.section_code %>/remove',
+				method: 'POST',
+				data: { _id: _id },
+			}).then((res) => {
+				if (res.data.code == 0) {
+					location.replace = "/";
+				}
+				else if (res.data.code == 1) {
+					$scope.getEvents();
+					$('.alert .message').html(res.data.message);
+					$('.alert').addClass('alert-success').show('slow');
+				}
+			})
+		}
+		$scope.editEvent = (ind) => {
+			$('.edit-event').fadeIn();
+			$('.events-tab').hide();
+			if (ind == -1) {
+				$scope.data = {};
+			}
+			else {
+				$scope.data = $scope.events[ind];
+			}
+		}
+		$scope.inc = function (attr) {
+			var list = $scope.data[attr];
+			if (!list) list = [];
+			list.push('');
+			$scope.data[attr] = list;
+		}
+		$scope.del = function (attr, ind) {
+			var list = $scope.data[attr];
+			list.splice(ind, 1);
+			$scope.data[attr] = list;
+		}
+	});
+	var getExceptID = (dic) => {
+		var _dic = {};
+		for (key in dic) {
+			if (key == '$$hashKey') {
+				continue;
+			}
+			_dic[key] = dic[key];
+		}
+		return _dic;
+	}
 </script>
+
 </html>

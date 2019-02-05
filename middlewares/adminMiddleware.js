@@ -4,7 +4,7 @@ module.exports.tech=(req,res,next)=>{
 		return;
 	}
 	if(req.method=='GET')
-		res.redirect('/admin');
+		res.redirect('/');
 	else
 		res.send({code:0,message:'Session Expired'});
 }
@@ -14,7 +14,7 @@ module.exports.non_tech=(req,res,next)=>{
 		return;
 	}
 	if(req.method=='GET')
-		res.redirect('/admin');
+		res.redirect('/');
 	else
 		res.send({code:0,message:'Session Expired'});
 }
@@ -24,7 +24,7 @@ module.exports.workshop=(req,res,next)=>{
 		return;
 	}
 	if(req.method=='GET')
-		res.redirect('/admin');
+		res.redirect('/');
 	else
 		res.send({code:0,message:'Session Expired'});
 }
